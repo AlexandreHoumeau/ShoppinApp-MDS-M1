@@ -1,20 +1,24 @@
 import React from "react";
 import { View, Text, FlatList } from "react-native";
 import CardProduct from "../../Components/Card.Product";
-import products from "../../Mocks/data";
+import { connect } from 'react-redux'
 
-const ProductList = (props) => {
+const ProductList = ({ navigation, products }) => {
+  console.log(products)
   return (
     <View>
       <FlatList
         keyExtractor={(item) => item.photo}
         data={products}
         renderItem={({ item }) => (
-          <CardProduct item={item} navigation={props.navigation} />
+          <CardProduct item={item} navigation={navigation} />
         )}
       />
     </View>
   );
 };
 
-export default ProductList;
+const mapStateToProps = (state) => ({
+  products: state.products
+})
+export default connect(mapStateToProps)(ProductList);

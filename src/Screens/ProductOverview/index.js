@@ -1,22 +1,25 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
-  View,
-  Text,
+  Dimensions,
   Image,
   StyleSheet,
-  Animated,
-  Dimensions,
-  SafeAreaView,
-  Button,
+  Text,
   TouchableOpacity,
+  View,
 } from "react-native";
 import { SharedElement } from "react-navigation-shared-element";
-import { AntDesign } from "@expo/vector-icons";
+import { connect } from 'react-redux';
+import { addProduct } from "../../actions/cartActions";
+
 const { height } = Dimensions.get("screen");
-const ProductOverView = ({ route, navigation }) => {
+
+const ProductOverView = ({ route, addProduct, cart }) => {
   const { item } = route.params;
   const { photo, title, price, content } = route.params.item;
 
+  const addItem = async () => {
+    await addProduct(item)
+  }
   return (
     <View style={styles.container}>
       <SharedElement style={styles.imgContainer} id={`item.${item.id}.photo`}>
@@ -32,7 +35,7 @@ const ProductOverView = ({ route, navigation }) => {
         <Text style={styles.price}>US {price}$</Text>
       </View>
 
-      <TouchableOpacity style={styles.button}>
+      <TouchableOpacity onPress={() => addItem()} style={styles.button}>
         <Text style={styles.textButton}>Buy now for {price}$</Text>
       </TouchableOpacity>
     </View>
@@ -81,23 +84,27 @@ const styles = StyleSheet.create({
   },
   titleDescription: {
     fontSize: 20,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 10,
   },
   detailsContainer: {
     margin: 20,
   },
   button: {
-    backgroundColor: '#49b6ff',
+    backgroundColor: "#49b6ff",
     padding: 15,
     margin: 30,
-    borderRadius: 25
+    borderRadius: 25,
   },
   textButton: {
-    color: '#fff',
-    fontWeight: 'bold',
-    textAlign: 'center'
-  }
+    color: "#fff",
+    fontWeight: "bold",
+    textAlign: "center",
+  },
 });
 
-export default ProductOverView;
+const mapState = (state) => ({
+  cart: state.cart
+})
+
+export default connect(mapState, {addProduct})(ProductOverView);

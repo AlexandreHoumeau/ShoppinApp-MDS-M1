@@ -1,15 +1,13 @@
-import React from "react";
+import { createDrawerNavigator } from "@react-navigation/drawer";
 import { NavigationContainer } from "@react-navigation/native";
-import ProductList from "../Screens/ProductsList";
-import ProductOverView from "../Screens/ProductOverview";
+import React from "react";
 import { createSharedElementStackNavigator } from "react-navigation-shared-element";
-import { Button, TouchableOpacity } from "react-native";
-import { FontAwesome5 } from "@expo/vector-icons";
-import Cart from "../Screens/Cart";
+import { connect } from "react-redux";
+import Home from "./Home";
+import OrderView from "./OrderView";
+import YourProducts from "./YourProducts";
+
 const Stack = createSharedElementStackNavigator();
-
-// const Stack = createStackNavigator();
-
 const MyTheme = {
   dark: false,
   colors: {
@@ -22,47 +20,22 @@ const MyTheme = {
   },
 };
 
+const Drawer = createDrawerNavigator();
+
 function AppContainer() {
   return (
     <NavigationContainer theme={MyTheme}>
-      <Stack.Navigator>
-        <Stack.Screen
-          name="ProductsList"
-          options={({ navigation }) => ({
-            title: "All Product",
-            headerRight: () => (
-              <TouchableOpacity
-                style={{ marginRight: 20 }}
-                onPress={() => navigation.navigate("Cart")}
-              >
-                <FontAwesome5 name="shopping-cart" size={24} color="black" />
-              </TouchableOpacity>
-            )
-          })}
-          component={ProductList}
-        />
-        <Stack.Screen name="Cart" component={Cart} />
-        <Stack.Screen
-          name="ProductOverview"
-          options={({ route }) => ({ title: route.params.item.title })}
-          component={ProductOverView}
-          sharedElementsConfig={(route, otherRoute, showing) => {
-            if (otherRoute.name === "ProductsList" && showing) {
-              const { item } = route.params;
-              return [
-                {
-                  id: `item.${item.id}.photo`,
-                  animation: "move",
-                  resize: "auto",
-                  align: "center-top",
-                },
-              ];
-            }
-          }}
-        />
-      </Stack.Navigator>
+      <Drawer.Navigator>
+        <Drawer.Screen name="Home" component={Home} />
+        <Drawer.Screen name="Orders" component={OrderView}/>
+        <Drawer.Screen name="Your Products" component={YourProducts}/>
+      </Drawer.Navigator>
     </NavigationContainer>
   );
 }
 
-export default AppContainer;
+const mapStateToProps = (state) => ({
+  cart: state.cart,
+});
+
+export default connect(mapStateToProps)(AppContainer);

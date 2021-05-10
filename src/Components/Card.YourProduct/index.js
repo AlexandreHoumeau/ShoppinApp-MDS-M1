@@ -1,8 +1,7 @@
 import React from "react";
 import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
-import { SharedElement } from "react-navigation-shared-element";
 
-const CardProduct = ({ item, navigation }) => {
+const CardYourProduct = ({ item, navigation }) => {
   const { photo, title, content, price } = item;
   return (
     <TouchableOpacity
@@ -10,17 +9,15 @@ const CardProduct = ({ item, navigation }) => {
       tension={50}
       friction={7}
       useNativeDriver
-      onPress={() => navigation.push("ProductOverview", { item })}
+      onPress={() => navigation.push("EditProduct", { item })}
       style={styles.container}
     >
       <View style={styles.imgContainer}>
-        <SharedElement id={`item.${item.id}.photo`}>
-          <Image
-            resizeMode="cover"
-            source={{ uri: photo }}
-            style={styles.image}
-          />
-        </SharedElement>
+        <Image
+          resizeMode="cover"
+          source={{ uri: photo }}
+          style={styles.image}
+        />
         <View style={styles.filter} />
       </View>
       <View style={styles.textContainer}>
@@ -95,4 +92,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CardProduct;
+export default CardYourProduct;

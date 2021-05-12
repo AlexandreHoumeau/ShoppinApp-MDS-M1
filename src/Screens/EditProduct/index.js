@@ -34,7 +34,7 @@ const EditProductView = ({
       title,
       content,
       photo,
-      price,
+      price: parseFloat(price),
     };
     addNewProduct(newProduct);
     navigation.goBack();
@@ -47,7 +47,7 @@ const EditProductView = ({
       title,
       content,
       photo,
-      price,
+      price: parseFloat(price),
     };
     editProduct(editedProduct);
     navigation.goBack();

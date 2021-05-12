@@ -15,7 +15,6 @@ export const deleteProduct = id => {
 };
 
 export const editProduct = (product) => {
-  console.log('Action: Edit Product')
   return {
 		type: EDIT_PRODUCT,
     product

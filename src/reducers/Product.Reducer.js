@@ -9,7 +9,6 @@ const {
 const initialState = PRODUCTS;
 
 const productReducer = (state = initialState, action) => {
-  console.log(action)
   switch (action.type) {
     case ADD_NEW_PRODUCT: {
       return [...state, action.product];

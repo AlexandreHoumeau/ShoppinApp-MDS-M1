@@ -4,7 +4,6 @@ import CardProduct from "../../Components/Card.Product";
 import { connect } from 'react-redux'
 
 const ProductList = ({ navigation, products }) => {
-  console.log(products)
   return (
     <View>
       <FlatList

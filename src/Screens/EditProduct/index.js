@@ -1,5 +1,13 @@
-import React, { useState } from "react";
-import { StyleSheet, TextInput } from "react-native";
+import React, { useEffect, useState } from "react";
+import {
+  Image,
+  KeyboardAvoidingView,
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+} from "react-native";
 import { Button, View } from "react-native-ui-lib";
 import { connect } from "react-redux";
 import {
@@ -29,7 +37,7 @@ const EditProductView = ({
 
   const addItem = () => {
     const newProduct = {
-      id: '_' + Math.random().toString(36).substr(2, 9),
+      id: "_" + Math.random().toString(36).substr(2, 9),
       user: "u1",
       title,
       content,
@@ -53,62 +61,97 @@ const EditProductView = ({
     navigation.goBack();
   };
   return (
-    <View>
-      <View style={{ marginHorizontal: 20, marginTop: 50 }}>
-        <TextInput
-          style={styles.input}
-          title="Title"
-          placeholder="Title"
-          onChangeText={(value) => setTitle(value)}
-          value={title}
-        />
-        <TextInput
-          style={styles.input}
-          title="Content"
-          placeholder="Content"
-          value={content}
-          onChangeText={(value) => setContent(value)}
-        />
-        <TextInput
-          style={styles.input}
-          title="Photo Link"
-          placeholder="Photo Link"
-          value={photo}
-          onChangeText={(value) => setPhoto(value)}
-        />
-        <TextInput
-          style={styles.input}
-          title="Price"
-          placeholder="Price"
-          value={price?.toString()}
-          onChangeText={(value) => setPrice(value)}
-        />
-      </View>
-      <Button
-        backgroundColor="#49b6ff"
-        label={item ? "EDIT" : "AJOUTER"}
-        labelStyle={{ fontWeight: "600" }}
-        style={{ marginHorizontal: 10 }}
-        enableShadows
-        onPress={() => (item ? editItem() : addItem())}
-      />
-      {item ? (
-        <Button
-          backgroundColor="red"
-          label="DELETE"
-          labelStyle={{ fontWeight: "600" }}
-          style={{ marginHorizontal: 10, marginTop: 20 }}
-          enableShadows
-          onPress={() => deleteItem()}
-        />
-      ) : null}
-    </View>
+    <KeyboardAvoidingView style={{ flex: 1, flexDirection: 'column',justifyContent: 'center',}} behavior="padding" enabled   keyboardVerticalOffset={100}>
+    <ScrollView style={{ flex: 1 }}>
+      <SafeAreaView>
+        {photo ? (
+          <View style={{ width: "100%", height: 200 }}>
+            <Image
+              source={{ uri: photo }}
+              style={{ resizeMode: "cover", width: "100%", height: "100%" }}
+            />
+          </View>
+        ) : null}
+        <View style={{ marginHorizontal: 20, marginTop: 50 }}>
+          <View style={styles.formContainer}>
+            <Text style={styles.label}>Title</Text>
+            <TextInput
+              style={styles.input}
+              title="Title"
+              placeholder="Title"
+              onChangeText={(value) => setTitle(value)}
+              value={title}
+            />
+            <Text style={styles.label}>Content</Text>
+            <TextInput
+              style={styles.input}
+              title="Content"
+              placeholder="Content"
+              value={content}
+              onChangeText={(value) => setContent(value)}
+            />
+            <Text style={styles.label}>Photo</Text>
+            <TextInput
+              style={styles.input}
+              title="Photo Link"
+              placeholder="Photo Link"
+              value={photo}
+              onChangeText={(value) => setPhoto(value)}
+            />
+            <Text style={styles.label}>Price</Text>
+            <TextInput
+              style={styles.input}
+              title="Price"
+              placeholder="Price"
+              value={price?.toString()}
+              onChangeText={(value) => setPrice(value)}
+            />
+            <Button
+              backgroundColor="#49b6ff"
+              label={item ? "EDIT" : "ADD"}
+              style={styles.btn}
+              labelStyle={{ fontWeight: "600" }}
+              enableShadows
+              onPress={() => (item ? editItem() : addItem())}
+            />
+            {item ? (
+              <Button
+                backgroundColor="red"
+                label="DELETE"
+                style={styles.btn}
+                labelStyle={{ fontWeight: "600" }}
+                enableShadows
+                onPress={() => deleteItem()}
+              />
+            ) : null}
+          </View>
+        </View>
+      </SafeAreaView>
+    </ScrollView>
+    </KeyboardAvoidingView>
   );
 };
 
 const styles = StyleSheet.create({
   input: {
-    margin: 20,
+    marginVertical: 10,
+    backgroundColor: "#fff",
+    padding: 20,
+    borderColor: "#49b6ff",
+    borderWidth: 1,
+    borderRadius: 10,
+  },
+  formContainer: {
+    marginHorizontal: 10,
+  },
+  btn: {
+    height: 55,
+    borderRadius: 10,
+    marginTop: 30,
+  },
+  label: {
+    fontWeight: "bold",
+    marginTop: 10,
   },
 });
 

@@ -1,13 +1,19 @@
 import PRODUCTS from "../Mock/Products";
+import fireabse from 'firebase'
+import { productRef } from "../config/firebase";
 
 const {
   ADD_NEW_PRODUCT,
   DELETE_PRODUCT,
-  EDIT_PRODUCT
+  EDIT_PRODUCT,
+  INIT_PRODUCTS,
 } = require("../actions/typesActions");
 
-const initialState = PRODUCTS;
+let initialState = [];
 
+// PRODUCTS.forEach(element => {
+//   fireabse.database().ref('products').push(element)
+// })
 const productReducer = (state = initialState, action) => {
   switch (action.type) {
     case ADD_NEW_PRODUCT: {
@@ -15,7 +21,7 @@ const productReducer = (state = initialState, action) => {
     }
     case DELETE_PRODUCT: {
       const newState = [...state]
-      newState.splice(action.id, 1)
+      newState.splice(action.key, 1)
       return newState
     }
     case EDIT_PRODUCT: {
@@ -24,9 +30,13 @@ const productReducer = (state = initialState, action) => {
       newState[index] = action.product
       return newState
     }
+    case INIT_PRODUCTS: {
+      return action.products
+    }
     default: {
       return state;
     }
+    
   }
 };
 

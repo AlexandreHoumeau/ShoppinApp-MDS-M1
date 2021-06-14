@@ -1,10 +1,13 @@
-import React from 'react'
+import React, { useEffect, useState } from "react";
+import { ActivityIndicator, View } from "react-native";
 import { createSharedElementStackNavigator } from "react-navigation-shared-element";
 import { connect } from "react-redux";
+import { initProducts } from "../actions/productActions";
 import Cart from "../Screens/Cart";
 import ProductOverView from "../Screens/ProductOverview";
 import ProductList from "../Screens/ProductsList";
-import { headerLeft, headerRight } from './headers';
+import { headerLeft, headerRight } from "./headers";
+import { fetchOrders } from "../actions/orderActions";
 
 const Stack = createSharedElementStackNavigator();
 const MyTheme = {
@@ -18,7 +21,24 @@ const MyTheme = {
     notification: "rgb(255, 69, 58)",
   },
 };
-const Home = ({ cart, navigation }) => {
+const Home = ({ cart, orders, navigation, initProducts, fetchOrders }) => {
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    (async () => {
+      await initProducts()
+    })()
+    setLoading(false);
+  });
+
+  if (loading) {
+    return (
+      <View style={{flex: 1, justifyContent: 'center'}}>
+        <ActivityIndicator size="large" />
+      </View>
+    );
+  }
+
   return (
     <Stack.Navigator>
       <Stack.Screen
@@ -54,10 +74,11 @@ const Home = ({ cart, navigation }) => {
       />
     </Stack.Navigator>
   );
-}
+};
 
 const mapStateToProps = (state) => ({
-  cart: state.cart
-})
+  cart: state.cart,
+  orders: state.order
+});
 
-export default connect(mapStateToProps)(Home)
+export default connect(mapStateToProps, { initProducts, fetchOrders })(Home);

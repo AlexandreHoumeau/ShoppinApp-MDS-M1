@@ -3,6 +3,8 @@ import { NavigationContainer } from "@react-navigation/native";
 import React from "react";
 import { createSharedElementStackNavigator } from "react-navigation-shared-element";
 import { connect } from "react-redux";
+import Login from "../Screens/Auth/Login";
+import Register from "../Screens/Auth/Register";
 import Home from "./Home";
 import OrderView from "./OrderView";
 import YourProducts from "./YourProducts";
@@ -22,20 +24,38 @@ const MyTheme = {
 
 const Drawer = createDrawerNavigator();
 
-function AppContainer() {
+function AppContainer({ user }) {
   return (
     <NavigationContainer theme={MyTheme}>
-      <Drawer.Navigator>
-        <Drawer.Screen name="Home" component={Home} />
-        <Drawer.Screen name="Orders" component={OrderView}/>
-        <Drawer.Screen name="Your Products" component={YourProducts}/>
-      </Drawer.Navigator>
+      <Stack.Navigator headerMode="none">
+        {!user.isLoggedIn ? (
+          AuthContainer()
+        ) : (
+          <Stack.Screen name="RootNavigation" component={RootNavigation} />
+        )}
+      </Stack.Navigator>
     </NavigationContainer>
   );
 }
 
+const AuthContainer = () => (
+  <>
+    <Stack.Screen name="Login" component={Login} />
+    <Stack.Screen name="Register" component={Register} />
+  </>
+);
+
+const RootNavigation = () => (
+  <Drawer.Navigator >
+    <Drawer.Screen name="Home" component={Home} />
+    <Drawer.Screen name="Orders" component={OrderView} />
+    <Drawer.Screen name="Your Products" component={YourProducts} />
+  </Drawer.Navigator>
+);
+
 const mapStateToProps = (state) => ({
   cart: state.cart,
+  user: state.user,
 });
 
 export default connect(mapStateToProps)(AppContainer);

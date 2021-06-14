@@ -22,7 +22,7 @@ export const headerRight = (products, navigation) => (
       {products.length ? (
         <View
           style={{
-            backgroundColor: "red",
+            backgroundColor: "#764abc",
             height: 10,
             width: 10,
             borderRadius: 20,
@@ -37,7 +37,7 @@ export const headerRight = (products, navigation) => (
         animation="slideInRight"
         duration={300}
         style={{
-          backgroundColor: "red",
+          backgroundColor: "#764abc",
           paddingVertical: 5,
           paddingHorizontal: 10,
           marginLeft: 10,

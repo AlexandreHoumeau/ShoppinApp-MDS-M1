@@ -19,6 +19,6 @@ const OrderView = ({ cart }) => (
   </Stack.Navigator>
 )
 const mapStateToProps = (state) => ({
-  cart: state.cart
+  cart: state.cart,
 })
 export default connect(mapStateToProps)(OrderView)

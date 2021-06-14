@@ -3,12 +3,12 @@ import { FlatList, Text, View } from "react-native";
 import CardYourProduct from "../../Components/Card.YourProduct";
 import { connect } from 'react-redux'
 
-const YourProducts = ({ navigation, products }) => {
+const YourProducts = ({ navigation, products, user }) => {
   const [formatedData, setFormatedData] = useState([]);
 
   useEffect(() => {
     const temp = [...products];
-    const array = temp.filter((element) => element.user === "u1");
+    const array = temp.filter((element) => element.user === user.id);
     setFormatedData(array);
   }, [products]);
 
@@ -21,6 +21,7 @@ const YourProducts = ({ navigation, products }) => {
   );
 };
 const mapStateToProps = (state) => ({
-  products: state.products
+  products: state.products,
+  user: state.user
 })
 export default connect(mapStateToProps)(YourProducts);

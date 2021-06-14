@@ -9,7 +9,7 @@ import { deleteCart } from "../../actions/cartActions";
 import ListOrder from "../../Components/List.Order";
 import { Order } from "../../Models/Order";
 
-const Cart = ({ cart, addOrder, deleteCart }) => {
+const Cart = ({ cart, addOrder, deleteCart, user }) => {
   const [formatedData, setFormatedData] = useState([]);
 
   useEffect(() => {
@@ -29,6 +29,7 @@ const Cart = ({ cart, addOrder, deleteCart }) => {
     const newOrder = new Order({
       items: formatedData,
       totalCost: Math.round(sum(cart) * 100) / 100,
+      user: user.email
     })
     addOrder(newOrder)
     deleteCart()
@@ -89,10 +90,10 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   totalPrice: {
-    color: "blue",
+    color: "#764abc",
   },
   textButton: {
-    color: "orange",
+    color: "#764abc",
     fontWeight: "bold",
   },
 });
@@ -100,5 +101,6 @@ const styles = StyleSheet.create({
 // export default Cart;
 const mapStateToProps = (state) => ({
   cart: state.cart,
+  user: state.user
 });
 export default connect(mapStateToProps, {addOrder, deleteCart})(Cart);

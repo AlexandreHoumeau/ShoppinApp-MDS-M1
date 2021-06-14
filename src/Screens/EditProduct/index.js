@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   Image,
   KeyboardAvoidingView,
@@ -7,6 +7,8 @@ import {
   StyleSheet,
   Text,
   TextInput,
+  TouchableOpacity,
+  Platform
 } from "react-native";
 import { Button, View } from "react-native-ui-lib";
 import { connect } from "react-redux";
@@ -22,23 +24,25 @@ const EditProductView = ({
   navigation,
   editProduct,
   addNewProduct,
+  user
 }) => {
   const { params } = route;
   const item = params?.item;
+
   const [title, setTitle] = useState(item?.title || null);
   const [content, setContent] = useState(item?.content || null);
   const [photo, setPhoto] = useState(item?.photo || null);
   const [price, setPrice] = useState(item?.price || null);
-
+  
   const deleteItem = () => {
-    deleteProduct(item.id);
+    deleteProduct(item);
     navigation.goBack();
   };
 
   const addItem = () => {
     const newProduct = {
       id: "_" + Math.random().toString(36).substr(2, 9),
-      user: "u1",
+      user: user.id,
       title,
       content,
       photo,
@@ -61,52 +65,60 @@ const EditProductView = ({
     navigation.goBack();
   };
   return (
-    <KeyboardAvoidingView style={{ flex: 1, flexDirection: 'column',justifyContent: 'center',}} behavior="padding" enabled   keyboardVerticalOffset={100}>
-    <ScrollView style={{ flex: 1 }}>
-      <SafeAreaView>
-        {photo ? (
-          <View style={{ width: "100%", height: 200 }}>
-            <Image
-              source={{ uri: photo }}
-              style={{ resizeMode: "cover", width: "100%", height: "100%" }}
-            />
-          </View>
-        ) : null}
-        <View style={{ marginHorizontal: 20, marginTop: 50 }}>
-          <View style={styles.formContainer}>
-            <Text style={styles.label}>Title</Text>
-            <TextInput
-              style={styles.input}
-              title="Title"
-              placeholder="Title"
-              onChangeText={(value) => setTitle(value)}
-              value={title}
-            />
-            <Text style={styles.label}>Content</Text>
-            <TextInput
-              style={styles.input}
-              title="Content"
-              placeholder="Content"
-              value={content}
-              onChangeText={(value) => setContent(value)}
-            />
-            <Text style={styles.label}>Photo</Text>
-            <TextInput
-              style={styles.input}
-              title="Photo Link"
-              placeholder="Photo Link"
-              value={photo}
-              onChangeText={(value) => setPhoto(value)}
-            />
-            <Text style={styles.label}>Price</Text>
-            <TextInput
-              style={styles.input}
-              title="Price"
-              placeholder="Price"
-              value={price?.toString()}
-              onChangeText={(value) => setPrice(value)}
-            />
-            <Button
+    <KeyboardAvoidingView
+      style={{ flex: 1, flexDirection: "column", justifyContent: "center" }}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height' }
+      enabled
+      keyboardVerticalOffset={100}
+    >
+      <ScrollView style={{ flex: 1 }}>
+        <SafeAreaView>
+          {photo ? (
+            <View style={{ width: "100%", height: 200 }}>
+              <Image
+                source={{ uri: photo }}
+                style={{ resizeMode: "cover", width: "100%", height: "100%" }}
+              />
+            </View>
+          ) : null}
+          <View style={{ marginHorizontal: 20, marginTop: 50 }}>
+            <View style={styles.formContainer}>
+              <Text style={styles.label}>Title</Text>
+              <TextInput
+                style={styles.input}
+                title="Title"
+                placeholder="Title"
+                onChangeText={(value) => setTitle(value)}
+                value={title}
+              />
+              <Text style={styles.label}>Content</Text>
+              <TextInput
+                style={styles.input}
+                title="Content"
+                placeholder="Content"
+                value={content}
+                onChangeText={(value) => setContent(value)}
+              />
+              <Text style={styles.label}>Photo</Text>
+              <TextInput
+                style={styles.input}
+                title="Photo Link"
+                placeholder="Photo Link"
+                value={photo}
+                onChangeText={(value) => setPhoto(value)}
+              />
+              <Text style={styles.label}>Price</Text>
+              <TextInput
+                style={styles.input}
+                title="Price"
+                placeholder="Price"
+                value={price?.toString()}
+                onChangeText={(value) => setPrice(value)}
+              />
+              <TouchableOpacity onPress={() => (item ? editItem() : addItem())}>
+                <Text>{item ? "EDIT" : "ADD"}</Text>
+              </TouchableOpacity>
+              <Button
               backgroundColor="#49b6ff"
               label={item ? "EDIT" : "ADD"}
               style={styles.btn}
@@ -124,10 +136,10 @@ const EditProductView = ({
                 onPress={() => deleteItem()}
               />
             ) : null}
+            </View>
           </View>
-        </View>
-      </SafeAreaView>
-    </ScrollView>
+        </SafeAreaView>
+      </ScrollView>
     </KeyboardAvoidingView>
   );
 };
@@ -155,6 +167,10 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect(null, { deleteProduct, editProduct, addNewProduct })(
+const mapStateToProps = (state) => ({
+  user: state.user
+})
+
+export default connect(mapStateToProps, { deleteProduct, editProduct, addNewProduct })(
   EditProductView
 );
